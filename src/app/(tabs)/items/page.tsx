@@ -1,4 +1,5 @@
 import { items } from '@/lib/placeholder-data';
+import ItemAddDrawer from '@/modules/items/components/item-add-drawer';
 import ItemDeleteBtn from '@/modules/items/components/item-delete-btn';
 
 export default function ItemsPage() {
@@ -13,6 +14,7 @@ export default function ItemsPage() {
           <ItemDeleteBtn item={item} />
         </div>
       ))}
+      <ItemAddDrawer />
     </div>
   );
 }
