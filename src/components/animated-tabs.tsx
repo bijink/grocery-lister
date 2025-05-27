@@ -2,19 +2,19 @@
 
 import { useMeasure } from '@uidotdev/usehooks';
 import { motion } from 'motion/react';
-import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const tabList = [
-  { value: 'lists', label: 'Lists' },
-  { value: 'items', label: 'Items' },
-];
+interface AnimatedTabsProps {
+  children: React.ReactNode;
+  tabList: { value: string; label: string }[];
+}
 
-export function AnimatedTabs({ children }: { children: React.ReactNode }) {
+export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const [activeTab, setActiveTab] = React.useState(pathname.split('/')[1]);
   const [ref] = useMeasure();
@@ -30,15 +30,15 @@ export function AnimatedTabs({ children }: { children: React.ReactNode }) {
           <div className="flex w-full justify-between gap-4">
             {tabList.map((tab) => (
               <TabsTrigger
+                asChild
                 key={tab.value}
                 value={tab.value}
                 ref={(el) => {
                   tabRefs.current[tab.value] = el;
                 }}
-                onClick={() => router.push(tab.value)}
                 className="text-muted-foreground data-[state=active]:text-primary relative border-none bg-transparent px-4 py-2 font-medium !shadow-none !ring-0 !outline-none focus:ring-0"
               >
-                {tab.label}
+                <Link href={tab.value}>{tab.label}</Link>
               </TabsTrigger>
             ))}
           </div>
@@ -52,7 +52,9 @@ export function AnimatedTabs({ children }: { children: React.ReactNode }) {
         </TabsList>
       </div>
 
-      <TabsContent value={activeTab}>{children}</TabsContent>
+      <TabsContent value={activeTab} className="px-0.5">
+        {children}
+      </TabsContent>
     </Tabs>
   );
 }

@@ -120,3 +120,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .add-option-menu-item-styles > * {
+    @apply w-fit rounded-2xl bg-green-700 px-5 py-3 font-[family-name:var(--font-geist-mono)] text-sm font-bold text-green-100 focus:bg-green-700 focus:text-green-100;
+  }
+}
