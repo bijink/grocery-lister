@@ -52,9 +52,7 @@ export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
         </TabsList>
       </div>
 
-      <TabsContent value={activeTab} className="px-0.5">
-        {children}
-      </TabsContent>
+      <TabsContent value={activeTab}>{children}</TabsContent>
     </Tabs>
   );
 }
