@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerFooter,
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
@@ -38,9 +39,10 @@ export default function ItemAddDrawer() {
         <Button className="block md:hidden">Open Drawer</Button>
       </DrawerTrigger>
 
-      <DrawerContent className="!bottom-0 mt-auto !h-fit overflow-y-auto rounded-t-2xl px-4 py-6 !pt-0 !pb-12">
+      <DrawerContent className="!bottom-0 mt-auto !h-fit overflow-hidden overflow-y-auto rounded-t-2xl px-4 py-6 !pt-0 !pb-12">
         <DrawerHeader className="sr-only">
           <DrawerTitle>Add item</DrawerTitle>
+          <DrawerDescription>Add new item here.</DrawerDescription>
         </DrawerHeader>
 
         <div className="mt-2 space-y-4">
