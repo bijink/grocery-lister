@@ -10,11 +10,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useGroceryListsStore } from '@/modules/list/stores/grocery-lists.store';
 
 export default function AddOptionsDropdown() {
+  const groceryLists = useGroceryListsStore((state) => state.lists);
+  const setGroceryLists = useGroceryListsStore((state) => state.setLists);
+
   const [open, setOpen] = useState(false);
 
   const toggleBtn = () => setOpen((prev) => !prev);
+
+  const handleAddList = () => {
+    setGroceryLists([...groceryLists, { id: Date.now(), items: [] }]);
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={toggleBtn}>
@@ -29,7 +37,7 @@ export default function AddOptionsDropdown() {
           'add-option-menu-item-styles',
         )}
       >
-        <DropdownMenuItem>Add list</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleAddList}>Add list</DropdownMenuItem>
         <DropdownMenuItem>Add item</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
