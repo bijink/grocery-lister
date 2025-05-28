@@ -1,3 +1,8 @@
+.gitignore
+.prettierignore
+
 *.lock
 *-lock.json
 *-lock.yaml
+
+/.husky/

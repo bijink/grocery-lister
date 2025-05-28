@@ -8,8 +8,13 @@
     "start": "next start",
     "lint": "tsc --noEmit && next lint",
     "lint:fix": "next lint --fix",
-    "format": "prettier . --check",
-    "format:fix": "prettier --config prettier.config.cli.mjs --write ."
+    "format": "prettier --config prettier.config.cli.mjs --check .",
+    "format:fix": "prettier --config prettier.config.cli.mjs --write .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": "eslint --fix --max-warnings=0",
+    "*": "prettier --config prettier.config.cli.mjs --write"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",
@@ -37,6 +42,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "eslint-config-prettier": "^10.1.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
