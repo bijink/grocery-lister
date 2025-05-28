@@ -7,8 +7,8 @@ import type { ItemsType } from '@/lib/placeholder-data';
 import { Button } from '@/components/ui/button';
 
 export default function ItemDeleteBtn({ item }: { item: ItemsType }) {
-  const handleDeleteItem = (ItemId: string) => {
-    console.log(ItemId);
+  const handleDeleteItem = (_itemId: string) => {
+    // console.log(itemId);
   };
 
   return (

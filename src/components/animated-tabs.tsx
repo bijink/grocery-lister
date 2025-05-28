@@ -38,7 +38,7 @@ export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
                 }}
                 className="text-muted-foreground data-[state=active]:text-primary relative border-none bg-transparent px-4 py-2 font-medium !shadow-none !ring-0 !outline-none focus:ring-0"
               >
-                <Link href={tab.value}>{tab.label}</Link>
+                <Link href={`/${tab.value}`}>{tab.label}</Link>
               </TabsTrigger>
             ))}
           </div>
