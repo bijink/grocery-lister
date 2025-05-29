@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { AnimatedAddBtn } from '@/components/animated-add-btn';
@@ -10,11 +11,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { useGroceryListsStore } from '@/modules/list/stores/grocery-lists.store';
+import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 export default function AddOptionsDropdown() {
-  const groceryLists = useGroceryListsStore((state) => state.lists);
-  const setGroceryLists = useGroceryListsStore((state) => state.setLists);
+  const router = useRouter();
+  const groceryLists = useGroceryListStore((state) => state.lists);
+  const setGroceryLists = useGroceryListStore((state) => state.setLists);
 
   const [open, setOpen] = useState(false);
 
@@ -22,6 +24,7 @@ export default function AddOptionsDropdown() {
 
   const handleAddList = () => {
     setGroceryLists([...groceryLists, { id: Date.now(), items: [] }]);
+    router.push('/lists');
   };
 
   return (

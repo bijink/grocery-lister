@@ -3,15 +3,15 @@
 import Link from 'next/link';
 
 import { formatMoment } from '@/lib/utils';
-import { useGroceryListsStore } from '@/modules/list/stores/grocery-lists.store';
+import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 export default function Lists() {
-  const groceryLists = useGroceryListsStore((state) => state.lists);
+  const groceryLists = useGroceryListStore((state) => state.lists);
 
   return (
     <div className="flex flex-col gap-2">
       {groceryLists?.length
-        ? groceryLists.map((list) => (
+        ? [...groceryLists].reverse().map((list) => (
             <Link
               key={list.id}
               href={`/lists/${list.id}`}
@@ -20,10 +20,29 @@ export default function Lists() {
               <p className="text-xs text-gray-400">{formatMoment(list.id)}</p>
               <div>
                 {list.items?.length ? (
-                  list.items.slice(0, 3).map((item) => <p key={item.id}>{item.name}</p>)
+                  <div
+                    style={
+                      list.items.length > 3
+                        ? {
+                            maskImage: 'linear-gradient(to top, transparent 0%, black 50%)',
+                            WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 50%)',
+                          }
+                        : undefined
+                    }
+                  >
+                    {list.items.slice(0, 3).map((item) => (
+                      <div key={item.id} className="flex justify-between gap-2">
+                        <p className="truncate">{item.name}</p>
+                        <div className="flex gap-2">
+                          <p>-</p>
+                          <p className="w-18 text-right font-light">{item.quantity}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                   <div className="flex justify-center py-5">
-                    <p className="text-sm text-gray-600">Click here to add items.</p>
+                    <p className="text-sm text-gray-600">Click me...</p>
                   </div>
                 )}
               </div>

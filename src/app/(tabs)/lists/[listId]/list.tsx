@@ -1,42 +1,106 @@
 'use client';
 
-import { ListPlusIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Loader, XIcon } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { ListType } from '@/modules/list/types/list';
 
-import { Button } from '@/components/ui/button';
-import { formatMoment } from '@/lib/utils';
-import ListDeleteBtn from '@/modules/list/components/list-delete-btn';
-import { useGroceryListsStore } from '@/modules/list/stores/grocery-lists.store';
+import { Input } from '@/components/ui/input';
+import { cn, formatMoment } from '@/lib/utils';
+import ItemSelectDialog from '@/modules/list/components/item-select-dialog';
+import { ListDeleteAlertDialog } from '@/modules/list/components/list-delete-alert-dialog';
+import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
+
+type QuantityState = Record<string, string>; // key = item.id
 
 export default function List({ id }: { id: number }) {
-  const groceryLists = useGroceryListsStore((state) => state.lists);
+  const groceryLists = useGroceryListStore((state) => state.lists);
+  const groceryList = useGroceryListStore((state) => state.getList(id) as ListType);
+  const updateItemQuantity = useGroceryListStore((state) => state.updateItemQuantity);
+  const deleteItem = useGroceryListStore((s) => s.deleteItemFromList);
 
-  const [groceryList, setGroceryList] = useState({} as ListType);
+  // Local state to hold quantity inputs per item
+  const [quantities, setQuantities] = useState<QuantityState>({});
 
+  // Initialize local quantities on first load
   useEffect(() => {
-    const list = groceryLists.find((list) => list.id === id);
-    setGroceryList(list as ListType);
-  }, [groceryLists, id]);
+    if (groceryList?.items) {
+      const initialQuantities: QuantityState = {};
+      groceryList.items.forEach((item) => {
+        initialQuantities[item.id] = item.quantity as string; // Ensure quantity is a string
+      });
+      setQuantities(initialQuantities);
+    }
+  }, [groceryList?.items]);
+
+  // Debounced update to the store
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      Object.entries(quantities).forEach(([itemId, quantity]) => {
+        const storeValue = groceryList?.items.find((i) => i.id === itemId)?.quantity;
+        if (storeValue !== quantity) {
+          updateItemQuantity(groceryList.id, itemId, quantity);
+        }
+      });
+    }, 1500); // 1500ms debounce
+
+    return () => clearTimeout(timeout);
+  }, [quantities, updateItemQuantity, groceryList]);
+
+  // Memoized input handler
+  const handleItemQuantityChange = useCallback(
+    (itemId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuantity = e.target.value;
+      setQuantities((prev) => ({ ...prev, [itemId]: newQuantity }));
+    },
+    [],
+  );
+
+  if (!groceryLists.length || !groceryList)
+    return (
+      <div className="flex justify-center pt-5">
+        <Loader className="animate-spin" />
+      </div>
+    );
 
   return (
     <div className="flex flex-col rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 px-3 py-2">
       <p className="text-xs text-gray-400">{formatMoment(groceryList?.id)}</p>
-      <div>
-        {groceryList?.items?.length ? (
-          groceryList.items.map((item) => <p key={item.id}>{item.name}</p>)
-        ) : (
-          <div className="flex justify-center py-5">
-            <p className="text-sm text-gray-600">Add items here...</p>
-          </div>
-        )}
-        <div className="flex justify-center gap-2">
-          <ListDeleteBtn list={groceryList} />
-          <Button aria-label="list-item-add-button" className="w-24" variant="outline">
-            <ListPlusIcon />
-          </Button>
+
+      {groceryList.items?.length ? (
+        <div className="flex flex-col gap-2">
+          {groceryList.items.map((item) => (
+            <div key={item.id} className="flex items-center justify-between gap-2">
+              <p className="truncate">{item.name}</p>
+              <div className="flex gap-2">
+                <p>-</p>
+                <Input
+                  className="!h-fit w-24 !rounded-none border-0 border-b border-dashed border-gray-400 !p-0 text-right font-light !shadow-none !ring-0 !outline-none focus:border-b focus:!ring-0"
+                  value={quantities[item.id] ?? ''}
+                  onChange={(e) => handleItemQuantityChange(item.id, e)}
+                />
+                <XIcon
+                  className="text-muted-foreground !h-5 !w-5"
+                  onClick={deleteItem.bind(null, groceryList.id, item.id)}
+                />
+              </div>
+            </div>
+          ))}
         </div>
+      ) : (
+        <div className="flex justify-center py-5">
+          <p className="text-sm text-gray-600">Add items here...</p>
+        </div>
+      )}
+
+      <div
+        className={cn('mt-2 flex justify-center gap-2', {
+          'pt-1': !groceryList.items?.length,
+          'pt-3': groceryList.items?.length,
+        })}
+      >
+        <ListDeleteAlertDialog listId={groceryList.id} />
+        <ItemSelectDialog listId={groceryList.id} />
       </div>
     </div>
   );
