@@ -1,7 +1,7 @@
 'use client';
 
-import { Loader, XIcon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { ListPlusIcon, Loader, XIcon } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { ListType } from '@/modules/list/types/list';
 
@@ -34,7 +34,6 @@ export default function List({ id }: { id: number }) {
       setQuantities(initialQuantities);
     }
   }, [groceryList?.items]);
-
   // Debounced update to the store
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -49,6 +48,10 @@ export default function List({ id }: { id: number }) {
     return () => clearTimeout(timeout);
   }, [quantities, updateItemQuantity, groceryList]);
 
+  // Get loading state for quantity input changes debouncing
+  const isItemsQtyUpdating = useMemo(() => {
+    return groceryList?.items?.some((item) => quantities[item.id] !== item.quantity);
+  }, [quantities, groceryList?.items]);
   // Memoized input handler
   const handleItemQuantityChange = useCallback(
     (itemId: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +94,11 @@ export default function List({ id }: { id: number }) {
         </div>
       ) : (
         <div className="flex justify-center py-5">
-          <p className="text-sm text-gray-600">Add items here...</p>
+          <p className="flex items-center gap-1.5 text-sm text-gray-600">
+            <span>Click</span>
+            <ListPlusIcon aria-label="list-item-add-button-icon" className="!h-4.5 !w-4.5" />
+            <span>to add items</span>
+          </p>
         </div>
       )}
 
@@ -102,11 +109,11 @@ export default function List({ id }: { id: number }) {
         })}
       >
         <div className="flex gap-1">
-          <ListCopyToClipboardBtn items={groceryList.items} />
-          <ListShareBtn items={groceryList.items} />
+          <ListCopyToClipboardBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
+          <ListShareBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
         </div>
         <div className="flex gap-1">
-          <ItemSelectDialog listId={groceryList.id} />
+          <ItemSelectDialog listId={groceryList.id} disabled={isItemsQtyUpdating} />
           <ListDeleteAlertDialog listId={groceryList.id} />
         </div>
       </div>

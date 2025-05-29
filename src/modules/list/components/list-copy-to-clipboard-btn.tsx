@@ -8,7 +8,13 @@ import type { ItemsType } from '@/lib/placeholder-data';
 
 import { Button } from '@/components/ui/button';
 
-export default function ListCopyToClipboardBtn({ items }: { items: ItemsType[] }) {
+export default function ListCopyToClipboardBtn({
+  items,
+  disabled,
+}: {
+  items: ItemsType[];
+  disabled?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -28,8 +34,8 @@ export default function ListCopyToClipboardBtn({ items }: { items: ItemsType[] }
       aria-label="list-copy-to-clipboard-button"
       size="icon"
       variant="outline"
-      disabled={!items.length}
       onClick={handleCopy}
+      disabled={!items.length || disabled}
     >
       {copied ? <ClipboardCheckIcon /> : <ClipboardIcon />}
     </Button>

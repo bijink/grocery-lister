@@ -13,7 +13,13 @@ import { items } from '@/lib/placeholder-data';
 import { cn } from '@/lib/utils';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
-export default function ItemSelectDialog({ listId }: { listId: number }) {
+export default function ItemSelectDialog({
+  listId,
+  disabled,
+}: {
+  listId: number;
+  disabled?: boolean;
+}) {
   const groceryLists = useGroceryListStore((state) => state.lists);
   const addItemToList = useGroceryListStore((state) => state.addItemToList);
 
@@ -22,13 +28,18 @@ export default function ItemSelectDialog({ listId }: { listId: number }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button aria-label="list-item-add-button" variant="outline" className="w-24">
+        <Button
+          aria-label="list-item-add-button"
+          variant="outline"
+          className="w-24"
+          disabled={disabled}
+        >
           <ListPlusIcon />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[70vh] overflow-y-scroll font-[family-name:var(--font-geist-mono)] sm:max-w-[425px]">
         <DialogHeader className="text-left">
-          <DialogTitle>Select item</DialogTitle>
+          <DialogTitle>Select item(s)</DialogTitle>
           <DialogDescription className="sr-only">Select an item</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2">

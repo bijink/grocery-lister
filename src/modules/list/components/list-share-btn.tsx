@@ -7,7 +7,13 @@ import type { ItemsType } from '@/lib/placeholder-data';
 
 import { Button } from '@/components/ui/button';
 
-export default function ListShareBtn({ items }: { items: ItemsType[] }) {
+export default function ListShareBtn({
+  items,
+  disabled,
+}: {
+  items: ItemsType[];
+  disabled?: boolean;
+}) {
   const handleShare = async () => {
     const formattedText = items.map((item) => `${item.name} - ${item.quantity}`).join('\n');
 
@@ -37,8 +43,8 @@ export default function ListShareBtn({ items }: { items: ItemsType[] }) {
       aria-label="list-share-button"
       size="icon"
       variant="outline"
-      disabled={!items.length}
       onClick={handleShare}
+      disabled={!items.length || disabled}
     >
       <Share2Icon />
     </Button>
