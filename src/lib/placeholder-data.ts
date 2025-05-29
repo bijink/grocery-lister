@@ -1,9 +1,3 @@
-export type ItemsType = {
-  id: string;
-  name: string;
-  quantity?: string;
-};
-
 export const items = [
   { id: 'item1', name: 'Apple', quantity: '' },
   { id: 'item2', name: 'Banana', quantity: '' },

@@ -3,7 +3,7 @@
 import { Share2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import type { ItemsType } from '@/lib/placeholder-data';
+import type { ItemType } from '@/modules/item/components/types/item';
 
 import { Button } from '@/components/ui/button';
 
@@ -11,7 +11,7 @@ export default function ListShareBtn({
   items,
   disabled,
 }: {
-  items: ItemsType[];
+  items: ItemType[];
   disabled?: boolean;
 }) {
   const handleShare = async () => {

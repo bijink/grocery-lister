@@ -4,7 +4,7 @@ import { ClipboardCheckIcon, ClipboardIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import type { ItemsType } from '@/lib/placeholder-data';
+import type { ItemType } from '@/modules/item/components/types/item';
 
 import { Button } from '@/components/ui/button';
 
@@ -12,7 +12,7 @@ export default function ListCopyToClipboardBtn({
   items,
   disabled,
 }: {
-  items: ItemsType[];
+  items: ItemType[];
   disabled?: boolean;
 }) {
   const [copied, setCopied] = useState(false);

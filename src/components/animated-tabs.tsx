@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { items } from '@/lib/placeholder-data';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 interface AnimatedTabsProps {
@@ -43,7 +42,8 @@ export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
               >
                 <Link href={`/${tab.value}`}>
                   {tab.label}
-                  <p>({tab.value === 'lists' ? groceryLists.length : items.length})</p>
+                  {/* <p>({tab.value === 'lists' ? groceryLists.length : items.length})</p> */}
+                  <p>({tab.value === 'lists' ? groceryLists.length : null})</p>
                 </Link>
               </TabsTrigger>
             ))}

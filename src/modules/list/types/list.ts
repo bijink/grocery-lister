@@ -1,6 +1,6 @@
-import type { ItemsType } from '@/lib/placeholder-data';
+import type { ItemType } from '@/modules/item/components/types/item';
 
 export interface ListType {
   id: number; // timestamp
-  items: ItemsType[];
+  items: ItemType[];
 }

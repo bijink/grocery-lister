@@ -1,6 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { toast } from 'sonner';
+
+import type { AxiosError } from 'axios';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,24 +17,35 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
+import { axiosInstance } from '@/lib/axios';
+
 
 export default function ItemAddDrawer() {
-  const [open, setOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
-  // Auto-focus input when drawer opens (with delay for animation)
-  useEffect(() => {
-    if (open) {
-      const timer = setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [open]);
+  const [open, setOpen] = useState(false);
+  const [itemName, setItemName] = useState('');
+
+  const mutation = useMutation({
+    mutationFn: (value: { name: string }) => {
+      return axiosInstance.post('/api/item', value);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['items'], refetchType: 'all' });
+      setOpen(false);
+      setItemName('');
+      toast.success('New item has been added');
+    },
+    onError: (err) => {
+      const error = err as AxiosError<{ error: string }>;
+      toast.error('Failed to add item', {
+        description: error.response?.data?.error || 'An unknown error occurred',
+      });
+    },
+  });
 
   const handleSave = () => {
-    // handle save logic here
-    setOpen(false);
+    mutation.mutate({ name: itemName });
   };
 
   return (
@@ -47,10 +62,12 @@ export default function ItemAddDrawer() {
 
         <div className="mt-2 space-y-4">
           <Input
-            ref={inputRef}
             placeholder="Item name"
             type="text"
             className="border-0 shadow-none !ring-0 !outline-none focus:!ring-0"
+            onChange={(e) => setItemName(e.target.value)}
+            value={itemName}
+            autoFocus
           />
         </div>
 

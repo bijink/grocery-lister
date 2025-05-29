@@ -2,11 +2,11 @@
 
 import { Trash2Icon } from 'lucide-react';
 
-import type { ItemsType } from '@/lib/placeholder-data';
+import type { ItemType } from './types/item';
 
 import { Button } from '@/components/ui/button';
 
-export default function ItemDeleteBtn({ item }: { item: ItemsType }) {
+export default function ItemDeleteBtn({ item }: { item: ItemType }) {
   const handleDeleteItem = (_itemId: string) => {
     // console.log(itemId);
   };

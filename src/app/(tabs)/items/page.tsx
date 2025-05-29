@@ -1,8 +1,27 @@
-import { items } from '@/lib/placeholder-data';
-import ItemAddDrawer from '@/modules/items/components/item-add-drawer';
-import ItemDeleteBtn from '@/modules/items/components/item-delete-btn';
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+import { Loader } from 'lucide-react';
+
+import type { ItemType } from '@/modules/item/components/types/item';
+
+import { axiosInstance } from '@/lib/axios';
+import ItemAddDrawer from '@/modules/item/components/item-add-drawer';
+import ItemDeleteBtn from '@/modules/item/components/item-delete-btn';
 
 export default function ItemsPage() {
+  const { data: items = [], isLoading: isItemsLoading } = useQuery({
+    queryKey: ['items'],
+    queryFn: () => axiosInstance.get('/api/items').then((res) => res.data as ItemType[]),
+  });
+
+  if (isItemsLoading)
+    return (
+      <div className="flex justify-center pt-5">
+        <Loader className="animate-spin" />
+      </div>
+    );
+
   return (
     <div>
       {items.map((item) => (
