@@ -7,8 +7,10 @@ import type { ListType } from '@/modules/list/types/list';
 
 import { Input } from '@/components/ui/input';
 import { cn, formatMoment } from '@/lib/utils';
-import ItemSelectDialog from '@/modules/list/components/item-select-dialog';
-import { ListDeleteAlertDialog } from '@/modules/list/components/list-delete-alert-dialog';
+import ItemSelectDialog from '@/modules/list/components/dialogs/item-select.dialog';
+import ListDeleteAlertDialog from '@/modules/list/components/dialogs/list-delete-alert.dialog';
+import ListCopyToClipboardBtn from '@/modules/list/components/list-copy-to-clipboard-btn';
+import ListShareBtn from '@/modules/list/components/list-share-btn';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 type QuantityState = Record<string, string>; // key = item.id
@@ -94,13 +96,19 @@ export default function List({ id }: { id: number }) {
       )}
 
       <div
-        className={cn('mt-2 flex justify-center gap-2', {
+        className={cn('flex justify-between', {
           'pt-1': !groceryList.items?.length,
-          'pt-3': groceryList.items?.length,
+          'pt-5': groceryList.items?.length,
         })}
       >
-        <ListDeleteAlertDialog listId={groceryList.id} />
-        <ItemSelectDialog listId={groceryList.id} />
+        <div className="flex gap-1">
+          <ListCopyToClipboardBtn items={groceryList.items} />
+          <ListShareBtn items={groceryList.items} />
+        </div>
+        <div className="flex gap-1">
+          <ItemSelectDialog listId={groceryList.id} />
+          <ListDeleteAlertDialog listId={groceryList.id} />
+        </div>
       </div>
     </div>
   );

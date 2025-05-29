@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { items } from '@/lib/placeholder-data';
 import { cn } from '@/lib/utils';
-
-import { useGroceryListStore } from '../stores/grocery-list.store';
+import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 export default function ItemSelectDialog({ listId }: { listId: number }) {
   const groceryLists = useGroceryListStore((state) => state.lists);
@@ -23,7 +22,7 @@ export default function ItemSelectDialog({ listId }: { listId: number }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button aria-label="list-item-add-button" className="w-24" variant="outline">
+        <Button aria-label="list-item-add-button" variant="outline" className="w-24">
           <ListPlusIcon />
         </Button>
       </DialogTrigger>

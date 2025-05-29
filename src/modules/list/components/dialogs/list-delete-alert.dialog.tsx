@@ -13,10 +13,9 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
-import { useGroceryListStore } from '../stores/grocery-list.store';
-
-export function ListDeleteAlertDialog({ listId }: { listId: number }) {
+export default function ListDeleteAlertDialog({ listId }: { listId: number }) {
   const router = useRouter();
   const deleteList = useGroceryListStore((state) => state.deleteList);
 
@@ -29,7 +28,12 @@ export function ListDeleteAlertDialog({ listId }: { listId: number }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button size="icon" variant="outline" className="bg-red-200">
+        <Button
+          aria-label="list-delete-button"
+          variant="outline"
+          size="icon"
+          className="text-red-600"
+        >
           <Trash2Icon />
         </Button>
       </AlertDialogTrigger>
