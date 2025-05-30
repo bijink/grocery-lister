@@ -25,6 +25,14 @@ export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
   const indicatorX = tabRefs.current[activeTab]?.offsetLeft || 0;
   const indicatorWidth = tabRefs.current[activeTab]?.offsetWidth || 0;
 
+  React.useEffect(() => {
+    // Update active tab when pathname changes
+    const newActiveTab = pathname.split('/')[1];
+    if (newActiveTab !== activeTab) {
+      setActiveTab(newActiveTab);
+    }
+  }, [pathname, activeTab]);
+
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" ref={ref}>
       <div className="border-border relative border-b">

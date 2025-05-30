@@ -23,8 +23,9 @@ export default function AddOptionsDropdown() {
   const toggleBtn = () => setOpen((prev) => !prev);
 
   const handleAddList = () => {
-    setGroceryLists([...groceryLists, { id: Date.now(), items: [] }]);
-    router.push('/lists');
+    const timestamp = Date.now();
+    setGroceryLists([...groceryLists, { id: timestamp, items: [] }]);
+    router.push(`/lists/${timestamp}`);
   };
 
   return (
