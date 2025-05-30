@@ -67,11 +67,11 @@ export default function Lists() {
       ) : (
         <div className="flex h-[60vh] flex-col items-center justify-center gap-3">
           <Image
-            src="/groceries.svg"
+            src="/no-lists.svg"
             width={480}
             height={480}
             className="w-40"
-            alt="empty-list-image"
+            alt="empty-lists-image"
             priority
           />
           <div className="text-center">

@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { Loader, PencilIcon, Trash2Icon } from 'lucide-react';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 import type { ItemType } from '@/modules/item/components/types/item';
@@ -33,24 +34,43 @@ export default function Items() {
 
   return (
     <div className="flex h-[68vh] flex-col overflow-scroll">
-      {items.map((item, index) => (
-        <div key={item.id}>
-          <div className="flex flex-row items-center justify-between py-1 pr-1 pl-4">
-            <p className="truncate text-lg" title={item.name}>
-              {item.name}
-            </p>
-            <div className="flex gap-1">
-              <Button size="icon" variant="ghost" onClick={() => openItemEditDrawer(item)}>
-                <PencilIcon className="!h-4.5 !w-4.5" />
-              </Button>
-              <Button size="icon" variant="ghost" onClick={() => openItemDeleteDialog(item)}>
-                <Trash2Icon className="!h-4.5 !w-4.5" />
-              </Button>
+      {items?.length ? (
+        items.map((item, index) => (
+          <div key={item.id}>
+            <div className="flex flex-row items-center justify-between py-1 pr-1 pl-4">
+              <p className="truncate text-lg" title={item.name}>
+                {item.name}
+              </p>
+              <div className="flex gap-1">
+                <Button size="icon" variant="ghost" onClick={() => openItemEditDrawer(item)}>
+                  <PencilIcon className="!h-4.5 !w-4.5" />
+                </Button>
+                <Button size="icon" variant="ghost" onClick={() => openItemDeleteDialog(item)}>
+                  <Trash2Icon className="!h-4.5 !w-4.5" />
+                </Button>
+              </div>
             </div>
+            {index !== items.length - 1 ? <Separator /> : null}
           </div>
-          {index !== items.length - 1 ? <Separator /> : null}
+        ))
+      ) : (
+        <div className="flex h-[60vh] flex-col items-center justify-center gap-4">
+          <Image
+            src="/no-items.svg"
+            width={480}
+            height={480}
+            className="w-40"
+            alt="empty-items-image"
+            priority
+          />
+          <div className="text-center">
+            <p className="font-bold">No items</p>
+            <p className="text-muted-foreground text-sm">
+              Click the + button and select <br /> &apos;Add item&apos; to add a new item.
+            </p>
+          </div>
         </div>
-      ))}
+      )}
     </div>
   );
 }
