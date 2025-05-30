@@ -34,8 +34,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ item
   return NextResponse.json({ message: `Item "${item.name}" deleted successfully.` });
 }
 
-export async function PUT(req: Request, { params }: { params: { itemId: string } }) {
-  const { itemId } = params;
+export async function PUT(req: Request, { params }: { params: Promise<{ itemId: string }> }) {
+  const { itemId } = await params;
   const body = await req.json();
   const { name } = body;
 
