@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { Loader, Trash2Icon } from 'lucide-react';
+import { Loader, PencilIcon, Trash2Icon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 import type { ItemType } from '@/modules/item/components/types/item';
@@ -11,12 +11,14 @@ import { Separator } from '@/components/ui/separator';
 import { axiosInstance } from '@/lib/axios';
 import ItemAddDrawer from '@/modules/item/components/dialog/item-add-drawer';
 import ItemDeleteAlertDialog from '@/modules/item/components/dialog/item-delete-alert.dialog';
+import ItemEditDrawer from '@/modules/item/components/dialog/item-edit-drawer';
 import { useItemDialogStore } from '@/modules/item/stores/item-dialog.store';
 
 export default function ItemsPage() {
   const pathname = usePathname();
   const rootPath = pathname.split('/')[1];
   const openItemDeleteDialog = useItemDialogStore((state) => state.openDelete);
+  const openItemEditDrawer = useItemDialogStore((state) => state.openEdit);
 
   const { data: items = [], isLoading: isItemsLoading } = useQuery({
     queryKey: ['items'],
@@ -37,14 +39,20 @@ export default function ItemsPage() {
         <div key={item.id}>
           <div className="flex flex-row items-center justify-between py-1 pr-1 pl-4">
             <p className="text-lg">{item.name}</p>
-            <Button size="icon" variant="ghost" onClick={() => openItemDeleteDialog(item)}>
-              <Trash2Icon className="!h-4.5 !w-4.5" />
-            </Button>
+            <div className="flex gap-1">
+              <Button size="icon" variant="ghost" onClick={() => openItemEditDrawer(item)}>
+                <PencilIcon className="!h-4.5 !w-4.5" />
+              </Button>
+              <Button size="icon" variant="ghost" onClick={() => openItemDeleteDialog(item)}>
+                <Trash2Icon className="!h-4.5 !w-4.5" />
+              </Button>
+            </div>
           </div>
           {index !== items.length - 1 ? <Separator /> : null}
         </div>
       ))}
       <ItemAddDrawer />
+      <ItemEditDrawer />
       <ItemDeleteAlertDialog />
     </div>
   );
