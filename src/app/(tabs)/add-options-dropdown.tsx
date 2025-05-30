@@ -47,8 +47,18 @@ export default function AddOptionsDropdown() {
           'add-option-menu-item-styles',
         )}
       >
-        <DropdownMenuItem onClick={handleAddList}>Add list</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleAddItem}>Add item</DropdownMenuItem>
+        <DropdownMenuItem
+          className="bg-gray-600 text-gray-200 focus:bg-gray-600 focus:text-gray-200"
+          onClick={handleAddList}
+        >
+          Add list
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="bg-gray-800 text-gray-200 focus:bg-gray-800 focus:text-gray-200"
+          onClick={handleAddItem}
+        >
+          Add item
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

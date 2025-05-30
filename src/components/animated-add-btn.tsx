@@ -21,7 +21,7 @@ export function AnimatedAddBtn({ isOpen, onToggle }: AnimatedAddBtnProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
       className={cn(
-        'flex h-14 w-14 items-center justify-center rounded-2xl bg-green-200 text-green-900 shadow-lg',
+        'flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-400 text-gray-200 shadow-lg',
       )}
       aria-label={isOpen ? 'Close' : 'Add'}
     >

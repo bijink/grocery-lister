@@ -80,7 +80,7 @@ export default function List({ id }: { id: number }) {
               <div className="flex gap-2">
                 <p>-</p>
                 <Input
-                  className="!h-fit w-24 !rounded-none border-0 border-b border-dashed border-gray-400 !p-0 text-right font-light !shadow-none !ring-0 !outline-none focus:border-b focus:!ring-0"
+                  className="!h-fit w-20 !rounded-none border-0 border-b border-dashed border-gray-400 !p-0 text-right font-light !shadow-none !ring-0 !outline-none focus:border-b focus:!ring-0"
                   value={quantities[item.id] ?? ''}
                   onChange={(e) => handleItemQuantityChange(item.id, e)}
                 />

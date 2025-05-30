@@ -25,7 +25,7 @@ export default function Lists() {
     );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex h-[75vh] flex-col gap-2 overflow-scroll rounded-sm">
       {groceryLists?.length ? (
         [...groceryLists].reverse().map((list) => (
           <Link
@@ -51,7 +51,7 @@ export default function Lists() {
                       <p className="truncate">{item.name}</p>
                       <div className="flex gap-2">
                         <p>-</p>
-                        <p className="w-18 text-right font-light">{item.quantity}</p>
+                        <p className="w-18 truncate text-right font-light">{item.quantity}</p>
                       </div>
                     </div>
                   ))}

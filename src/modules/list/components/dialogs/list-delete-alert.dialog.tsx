@@ -32,7 +32,7 @@ export default function ListDeleteAlertDialog({ listId }: { listId: number }) {
           aria-label="list-delete-button"
           variant="outline"
           size="icon"
-          className="text-red-600"
+          className="text-red-600 hover:text-red-600"
         >
           <Trash2Icon />
         </Button>

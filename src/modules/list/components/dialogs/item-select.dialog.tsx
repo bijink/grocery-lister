@@ -56,13 +56,13 @@ export default function ItemSelectDialog({
             return (
               <div
                 key={item.id}
-                className={cn('rounded-md bg-gray-100 px-2 py-2', {
+                className={cn('cursor-default rounded-md bg-gray-100 px-2 py-2', {
                   'text-gray-300': isAdded,
                 })}
                 onClick={addItemToList.bind(null, listId, item)}
                 role="button"
               >
-                <p className="text-lg">{item.name}</p>
+                <p className="truncate text-lg">{item.name}</p>
               </div>
             );
           })}
