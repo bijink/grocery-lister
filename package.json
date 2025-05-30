@@ -14,7 +14,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": "eslint --fix --max-warnings=0",
-    "*": "prettier --config prettier.config.cli.mjs --write"
+    "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier --config prettier.config.cli.mjs --write"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.14",
