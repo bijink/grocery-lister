@@ -1,4 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import { ListPlusIcon } from 'lucide-react';
+
+import type { ItemType } from '@/modules/item/components/types/item';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { items } from '@/lib/placeholder-data';
+import { axiosInstance } from '@/lib/axios';
 import { cn } from '@/lib/utils';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
@@ -22,6 +25,11 @@ export default function ItemSelectDialog({
 }) {
   const groceryLists = useGroceryListStore((state) => state.lists);
   const addItemToList = useGroceryListStore((state) => state.addItemToList);
+
+  const { data: items = [] } = useQuery({
+    queryKey: ['items'],
+    queryFn: () => axiosInstance.get('/api/items').then((res) => res.data as ItemType[]),
+  });
 
   const selectedListIndex = groceryLists.findIndex((list) => list?.id === listId);
 
@@ -37,12 +45,12 @@ export default function ItemSelectDialog({
           <ListPlusIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[70vh] overflow-y-scroll font-[family-name:var(--font-geist-mono)] sm:max-w-[425px]">
+      <DialogContent className="flex h-[70vh] flex-col justify-start overflow-y-scroll font-[family-name:var(--font-geist-mono)] sm:max-w-[425px]">
         <DialogHeader className="text-left">
           <DialogTitle>Select item(s)</DialogTitle>
           <DialogDescription className="sr-only">Select an item</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-2">
+        <div className="flex h-full flex-col gap-2 overflow-scroll">
           {items.map((item) => {
             const isAdded = groceryLists[selectedListIndex].items.some((i) => i.name === item.name);
             return (

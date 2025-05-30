@@ -11,12 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useItemDialogStore } from '@/modules/item/stores/item-dialog.store';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 export default function AddOptionsDropdown() {
   const router = useRouter();
   const groceryLists = useGroceryListStore((state) => state.lists);
   const setGroceryLists = useGroceryListStore((state) => state.setLists);
+  const openDrawer = useItemDialogStore((state) => state.openAdd);
 
   const [open, setOpen] = useState(false);
 
@@ -26,6 +28,10 @@ export default function AddOptionsDropdown() {
     const timestamp = Date.now();
     setGroceryLists([...groceryLists, { id: timestamp, items: [] }]);
     router.push(`/lists/${timestamp}`);
+  };
+  const handleAddItem = () => {
+    router.push('/items');
+    openDrawer();
   };
 
   return (
@@ -42,7 +48,7 @@ export default function AddOptionsDropdown() {
         )}
       >
         <DropdownMenuItem onClick={handleAddList}>Add list</DropdownMenuItem>
-        <DropdownMenuItem>Add item</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleAddItem}>Add item</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

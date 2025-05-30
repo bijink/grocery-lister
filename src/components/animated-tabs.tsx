@@ -4,34 +4,39 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import * as React from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 interface AnimatedTabsProps {
-  children: React.ReactNode;
+  children: ReactNode;
   tabList: { value: string; label: string }[];
 }
 
 export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
   const pathname = usePathname();
+  const rootPath = pathname.split('/')[1];
   const groceryLists = useGroceryListStore((state) => state.lists);
 
-  const [activeTab, setActiveTab] = React.useState(pathname.split('/')[1]);
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const [isGroceryListsLoading, setIsGroceryListsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState(rootPath);
   const [ref] = useMeasure();
-  const tabRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
 
   const indicatorX = tabRefs.current[activeTab]?.offsetLeft || 0;
   const indicatorWidth = tabRefs.current[activeTab]?.offsetWidth || 0;
 
-  React.useEffect(() => {
+  useEffect(() => {
+    setIsGroceryListsLoading(false);
+  }, [groceryLists]);
+  useEffect(() => {
     // Update active tab when pathname changes
-    const newActiveTab = pathname.split('/')[1];
-    if (newActiveTab !== activeTab) {
-      setActiveTab(newActiveTab);
+    if (rootPath !== activeTab) {
+      setActiveTab(rootPath);
     }
-  }, [pathname, activeTab]);
+  }, [rootPath, activeTab]);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" ref={ref}>
@@ -50,8 +55,9 @@ export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
               >
                 <Link href={`/${tab.value}`}>
                   {tab.label}
-                  {/* <p>({tab.value === 'lists' ? groceryLists.length : items.length})</p> */}
-                  <p>({tab.value === 'lists' ? groceryLists.length : null})</p>
+                  {tab.value === 'lists' ? (
+                    <p>({isGroceryListsLoading ? '-' : groceryLists.length})</p>
+                  ) : null}
                 </Link>
               </TabsTrigger>
             ))}
