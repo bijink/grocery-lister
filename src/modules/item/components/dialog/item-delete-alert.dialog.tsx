@@ -9,7 +9,6 @@ import type { AxiosError } from 'axios';
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -17,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import { axiosInstance } from '@/lib/axios';
 
 import { useItemDialogStore } from '../../stores/item-dialog.store';
@@ -42,6 +42,7 @@ export default function ItemDeleteAlertDialog() {
         description: error.response?.data?.message || 'An unknown error occurred',
       });
     } finally {
+      closeDialog();
       setIsLoading(false);
     }
   };
@@ -54,10 +55,10 @@ export default function ItemDeleteAlertDialog() {
           <AlertDialogDescription>This will permanently delete the item.</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-row justify-end">
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDeleteItem} className="w-24 px-2" disabled={isLoading}>
+          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <Button onClick={handleDeleteItem} className="w-24 px-2" disabled={isLoading}>
             {isLoading ? <Loader2 className="animate-spin" /> : 'Continue'}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
