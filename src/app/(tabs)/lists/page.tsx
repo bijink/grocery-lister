@@ -1,3 +1,5 @@
+import Lists from './lists';
+
 export default function ListsPage() {
-  return <div>Lists</div>;
+  return <Lists />;
 }
