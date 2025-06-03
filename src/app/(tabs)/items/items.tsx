@@ -53,7 +53,7 @@ export default function Items() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <div className="flex h-[65vh] flex-col overflow-scroll">
+      <div className="flex h-[63vh] flex-col overflow-scroll">
         {filteredItems?.length ? (
           filteredItems.map((item, index) => (
             <div key={item.id}>

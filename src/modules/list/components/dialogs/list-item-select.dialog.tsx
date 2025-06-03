@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ListPlusIcon, Loader2, SearchIcon } from 'lucide-react';
+import { ListPlusIcon, Loader2Icon, SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -14,9 +14,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input'; // Make sure to import your Input component
+import { Input } from '@/components/ui/input';
 import { axiosInstance } from '@/lib/axios';
-import { cn } from '@/lib/utils';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 export default function ListItemSelectDialog({
@@ -29,6 +28,7 @@ export default function ListItemSelectDialog({
   const groceryLists = useGroceryListStore((state) => state.lists);
   const addItemToList = useGroceryListStore((state) => state.addItemToList);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
   const { data: items = [], isLoading: isItemsLoading } = useQuery({
@@ -37,14 +37,31 @@ export default function ListItemSelectDialog({
   });
 
   const selectedListIndex = groceryLists.findIndex((list) => list?.id === listId);
+  const selectedItems = groceryLists[selectedListIndex]?.items || [];
 
-  // Filter items based on search term
-  const filteredItems = items.filter((item) =>
+  // Separate items into unselected and selected
+  const [unselectedItems, selectedItemsInList] = items.reduce(
+    ([unselected, selected], item) => {
+      const isSelected = selectedItems.some((i) => i.name === item.name);
+      return isSelected ? [unselected, [...selected, item]] : [[...unselected, item], selected];
+    },
+    [[], []] as [ItemType[], ItemType[]],
+  );
+
+  // Filter both groups based on search term
+  const filteredUnselected = unselectedItems.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+  const filteredSelected = selectedItemsInList.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  const hasUnselectedResults = filteredUnselected.length > 0;
+  const hasSelectedResults = filteredSelected.length > 0;
+  const hasAnyResults = hasUnselectedResults || hasSelectedResults;
+
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button
           aria-label="list-item-add-button"
@@ -52,10 +69,13 @@ export default function ListItemSelectDialog({
           className="w-24"
           disabled={disabled || isItemsLoading}
         >
-          {isItemsLoading ? <Loader2 className="animate-spin" /> : <ListPlusIcon />}
+          {isItemsLoading ? <Loader2Icon className="animate-spin" /> : <ListPlusIcon />}
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex h-[70vh] flex-col justify-start overflow-y-scroll font-[family-name:var(--font-geist-mono)] sm:max-w-[425px]">
+      <DialogContent
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="flex h-[70vh] flex-col justify-start overflow-y-scroll font-[family-name:var(--font-geist-mono)] sm:max-w-[425px]"
+      >
         <DialogHeader className="text-left">
           <DialogTitle>Select item(s)</DialogTitle>
           <DialogDescription className="sr-only">Select an item</DialogDescription>
@@ -73,24 +93,41 @@ export default function ListItemSelectDialog({
         </div>
 
         <div className="flex h-full flex-col gap-2 overflow-scroll">
-          {filteredItems?.length ? (
-            filteredItems.map((item) => {
-              const isAdded = groceryLists[selectedListIndex].items.some(
-                (i) => i.name === item.name,
-              );
-              return (
-                <div
-                  key={item.id}
-                  className={cn('cursor-default rounded-md bg-gray-100 px-2 py-2', {
-                    'text-gray-300': isAdded,
-                  })}
-                  onClick={() => !isAdded && addItemToList(listId, item)}
-                  role="button"
-                >
-                  <p className="truncate text-lg">{item.name}</p>
-                </div>
-              );
-            })
+          {hasAnyResults ? (
+            <>
+              {/* Unselected items section */}
+              {hasUnselectedResults && (
+                <>
+                  <p className="text-muted-foreground text-sm font-medium">Available items</p>
+                  {filteredUnselected.map((item) => (
+                    <div
+                      key={item.id}
+                      className="cursor-default rounded-md bg-gray-100 px-2 py-2 hover:bg-gray-200"
+                      onClick={addItemToList.bind(null, listId, item)}
+                      role="button"
+                    >
+                      <p className="truncate text-lg">{item.name}</p>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {/* Selected items section */}
+              {hasSelectedResults && (
+                <>
+                  <p className="text-muted-foreground text-sm font-medium">Already in list</p>
+                  {filteredSelected.map((item) => (
+                    <div
+                      key={item.id}
+                      className="cursor-default rounded-md bg-gray-100 px-2 py-2 text-gray-400"
+                      role="button"
+                    >
+                      <p className="truncate text-lg">{item.name}</p>
+                    </div>
+                  ))}
+                </>
+              )}
+            </>
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3">
               <Image

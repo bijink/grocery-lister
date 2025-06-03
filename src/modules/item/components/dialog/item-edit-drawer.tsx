@@ -52,7 +52,7 @@ export default function ItemEditDrawer() {
 
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({ name: itemName });
+    mutation.mutate({ name: itemName.trim() });
   };
 
   // Set item name when item changes (e.g., when opening the drawer)
