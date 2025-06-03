@@ -50,7 +50,7 @@ export default function ItemAddDrawer() {
 
   const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({ name: itemName });
+    mutation.mutate({ name: itemName.trim() });
   };
 
   // Auto-focus input when drawer opens (with delay for animation)
