@@ -7,8 +7,8 @@ import type { ListType } from '@/modules/list/types/list';
 
 import { Input } from '@/components/ui/input';
 import { cn, formatMoment } from '@/lib/utils';
-import ItemSelectDialog from '@/modules/list/components/dialogs/item-select.dialog';
 import ListDeleteAlertDialog from '@/modules/list/components/dialogs/list-delete-alert.dialog';
+import ListItemSelectDialog from '@/modules/list/components/dialogs/list-item-select.dialog';
 import ListCopyToClipboardBtn from '@/modules/list/components/list-copy-to-clipboard-btn';
 import ListShareBtn from '@/modules/list/components/list-share-btn';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
@@ -72,7 +72,6 @@ export default function List({ id }: { id: number }) {
     <div className="h-[80vh] overflow-scroll pb-24 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="flex flex-col rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 px-3 py-2">
         <p className="text-xs text-gray-400">{formatMoment(groceryList?.id)}</p>
-
         {groceryList.items?.length ? (
           <div className="flex flex-col gap-2">
             {groceryList.items.map((item) => (
@@ -114,7 +113,7 @@ export default function List({ id }: { id: number }) {
             <ListShareBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
           </div>
           <div className="flex gap-1">
-            <ItemSelectDialog listId={groceryList.id} disabled={isItemsQtyUpdating} />
+            <ListItemSelectDialog listId={groceryList.id} disabled={isItemsQtyUpdating} />
             <ListDeleteAlertDialog listId={groceryList.id} />
           </div>
         </div>

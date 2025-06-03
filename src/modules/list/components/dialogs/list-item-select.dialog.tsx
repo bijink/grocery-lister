@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { ListPlusIcon, Loader2 } from 'lucide-react';
+import { ListPlusIcon, Loader2, SearchIcon } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 import type { ItemType } from '@/modules/item/components/types/item';
 
@@ -13,11 +14,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input'; // Make sure to import your Input component
 import { axiosInstance } from '@/lib/axios';
 import { cn } from '@/lib/utils';
 import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
-export default function ItemSelectDialog({
+export default function ListItemSelectDialog({
   listId,
   disabled,
 }: {
@@ -27,12 +29,19 @@ export default function ItemSelectDialog({
   const groceryLists = useGroceryListStore((state) => state.lists);
   const addItemToList = useGroceryListStore((state) => state.addItemToList);
 
+  const [searchTerm, setSearchTerm] = useState('');
+
   const { data: items = [], isLoading: isItemsLoading } = useQuery({
     queryKey: ['items'],
     queryFn: () => axiosInstance.get('/api/items').then((res) => res.data as ItemType[]),
   });
 
   const selectedListIndex = groceryLists.findIndex((list) => list?.id === listId);
+
+  // Filter items based on search term
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   return (
     <Dialog>
@@ -51,9 +60,21 @@ export default function ItemSelectDialog({
           <DialogTitle>Select item(s)</DialogTitle>
           <DialogDescription className="sr-only">Select an item</DialogDescription>
         </DialogHeader>
+
+        {/* Search Input */}
+        <div className="relative">
+          <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
+          <Input
+            placeholder="Search items..."
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
         <div className="flex h-full flex-col gap-2 overflow-scroll">
-          {items?.length ? (
-            items.map((item) => {
+          {filteredItems?.length ? (
+            filteredItems.map((item) => {
               const isAdded = groceryLists[selectedListIndex].items.some(
                 (i) => i.name === item.name,
               );
@@ -63,7 +84,7 @@ export default function ItemSelectDialog({
                   className={cn('cursor-default rounded-md bg-gray-100 px-2 py-2', {
                     'text-gray-300': isAdded,
                   })}
-                  onClick={addItemToList.bind(null, listId, item)}
+                  onClick={() => !isAdded && addItemToList(listId, item)}
                   role="button"
                 >
                   <p className="truncate text-lg">{item.name}</p>
@@ -81,8 +102,10 @@ export default function ItemSelectDialog({
                 priority
               />
               <div className="text-center">
-                <p className="font-bold">No items</p>
-                <p className="text-muted-foreground text-sm">Add item(s) first</p>
+                <p className="font-bold">{searchTerm ? 'No matching items' : 'No items'}</p>
+                <p className="text-muted-foreground text-sm">
+                  {searchTerm ? 'Try a different search' : 'Add item(s) first'}
+                </p>
               </div>
             </div>
           )}
