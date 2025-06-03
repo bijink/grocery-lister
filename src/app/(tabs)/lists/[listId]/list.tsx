@@ -86,7 +86,7 @@ export default function List({ id }: { id: number }) {
                   />
                   <XIcon
                     className="text-muted-foreground !h-5 !w-5"
-                    onClick={deleteItem.bind(null, groceryList.id, item.id)}
+                    onDoubleClick={deleteItem.bind(null, groceryList.id, item.id)}
                   />
                 </div>
               </div>
