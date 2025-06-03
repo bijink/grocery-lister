@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ListPlusIcon } from 'lucide-react';
+import { ListPlusIcon, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
 import type { ItemType } from '@/modules/item/components/types/item';
@@ -27,7 +27,7 @@ export default function ItemSelectDialog({
   const groceryLists = useGroceryListStore((state) => state.lists);
   const addItemToList = useGroceryListStore((state) => state.addItemToList);
 
-  const { data: items = [] } = useQuery({
+  const { data: items = [], isLoading: isItemsLoading } = useQuery({
     queryKey: ['items'],
     queryFn: () => axiosInstance.get('/api/items').then((res) => res.data as ItemType[]),
   });
@@ -41,9 +41,9 @@ export default function ItemSelectDialog({
           aria-label="list-item-add-button"
           variant="outline"
           className="w-24"
-          disabled={disabled}
+          disabled={disabled || isItemsLoading}
         >
-          <ListPlusIcon />
+          {isItemsLoading ? <Loader2 className="animate-spin" /> : <ListPlusIcon />}
         </Button>
       </DialogTrigger>
       <DialogContent className="flex h-[70vh] flex-col justify-start overflow-y-scroll font-[family-name:var(--font-geist-mono)] sm:max-w-[425px]">

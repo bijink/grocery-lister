@@ -69,52 +69,54 @@ export default function List({ id }: { id: number }) {
     );
 
   return (
-    <div className="flex flex-col rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 px-3 py-2">
-      <p className="text-xs text-gray-400">{formatMoment(groceryList?.id)}</p>
+    <div className="h-[80vh] overflow-scroll pb-24 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-col rounded-sm border-2 border-dashed border-gray-300 bg-gray-50 px-3 py-2">
+        <p className="text-xs text-gray-400">{formatMoment(groceryList?.id)}</p>
 
-      {groceryList.items?.length ? (
-        <div className="flex flex-col gap-2">
-          {groceryList.items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between gap-2">
-              <p className="truncate">{item.name}</p>
-              <div className="flex gap-2">
-                <p>-</p>
-                <Input
-                  className="!h-fit w-20 !rounded-none border-0 border-b border-dashed border-gray-400 !p-0 text-right font-light !shadow-none !ring-0 !outline-none focus:border-b focus:!ring-0"
-                  value={quantities[item.id] ?? ''}
-                  onChange={(e) => handleItemQuantityChange(item.id, e)}
-                />
-                <XIcon
-                  className="text-muted-foreground !h-5 !w-5"
-                  onClick={deleteItem.bind(null, groceryList.id, item.id)}
-                />
+        {groceryList.items?.length ? (
+          <div className="flex flex-col gap-2">
+            {groceryList.items.map((item) => (
+              <div key={item.id} className="flex items-center justify-between gap-2">
+                <p className="truncate">{item.name}</p>
+                <div className="flex gap-2">
+                  <p>-</p>
+                  <Input
+                    className="!h-fit w-20 !rounded-none border-0 border-b border-dashed border-gray-400 !p-0 text-right font-light !shadow-none !ring-0 !outline-none focus:border-b focus:!ring-0"
+                    value={quantities[item.id] ?? ''}
+                    onChange={(e) => handleItemQuantityChange(item.id, e)}
+                  />
+                  <XIcon
+                    className="text-muted-foreground !h-5 !w-5"
+                    onClick={deleteItem.bind(null, groceryList.id, item.id)}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="flex justify-center py-5">
-          <p className="flex items-center gap-1.5 text-sm text-gray-600">
-            <span>Click</span>
-            <ListPlusIcon aria-label="list-item-add-button-icon" className="!h-4.5 !w-4.5" />
-            <span>to add items</span>
-          </p>
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center py-5">
+            <p className="flex items-center gap-1.5 text-sm text-gray-600">
+              <span>Click</span>
+              <ListPlusIcon aria-label="list-item-add-button-icon" className="!h-4.5 !w-4.5" />
+              <span>to add items</span>
+            </p>
+          </div>
+        )}
 
-      <div
-        className={cn('flex justify-between', {
-          'pt-1': !groceryList.items?.length,
-          'pt-5': groceryList.items?.length,
-        })}
-      >
-        <div className="flex gap-1">
-          <ListCopyToClipboardBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
-          <ListShareBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
-        </div>
-        <div className="flex gap-1">
-          <ItemSelectDialog listId={groceryList.id} disabled={isItemsQtyUpdating} />
-          <ListDeleteAlertDialog listId={groceryList.id} />
+        <div
+          className={cn('flex justify-between', {
+            'pt-1': !groceryList.items?.length,
+            'pt-5': groceryList.items?.length,
+          })}
+        >
+          <div className="flex gap-1">
+            <ListCopyToClipboardBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
+            <ListShareBtn items={groceryList.items} disabled={isItemsQtyUpdating} />
+          </div>
+          <div className="flex gap-1">
+            <ItemSelectDialog listId={groceryList.id} disabled={isItemsQtyUpdating} />
+            <ListDeleteAlertDialog listId={groceryList.id} />
+          </div>
         </div>
       </div>
     </div>
