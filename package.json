@@ -1,6 +1,6 @@
 {
   "name": "grocery-lister",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -11,10 +11,6 @@
     "format": "prettier --config prettier.config.cli.mjs --check .",
     "format:fix": "prettier --config prettier.config.cli.mjs --write .",
     "prepare": "husky"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": "eslint --fix --max-warnings=0",
-    "**/*.{ts,tsx,js,jsx,css,md,json}": "prettier --config prettier.config.cli.mjs --write"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -43,6 +39,8 @@
   },
   "devDependencies": {
     "@bijink/prettier-config": "1.2.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@tanstack/eslint-plugin-query": "^5.78.0",
