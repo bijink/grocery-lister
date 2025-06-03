@@ -1,4 +1,4 @@
-import type { ItemType } from '@/modules/item/components/types/item';
+import type { ItemType } from '@/modules/item/types/item';
 
 export interface ListType {
   id: number; // timestamp

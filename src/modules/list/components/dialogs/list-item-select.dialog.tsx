@@ -3,7 +3,7 @@ import { ListPlusIcon, Loader2Icon, SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import type { ItemType } from '@/modules/item/components/types/item';
+import type { ItemType } from '@/modules/item/types/item';
 
 import { Button } from '@/components/ui/button';
 import {

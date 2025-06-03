@@ -4,7 +4,7 @@ import { ClipboardCheckIcon, ClipboardIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import type { ItemType } from '@/modules/item/components/types/item';
+import type { ItemType } from '@/modules/item/types/item';
 
 import { Button } from '@/components/ui/button';
 
