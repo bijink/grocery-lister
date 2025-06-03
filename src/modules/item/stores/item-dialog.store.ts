@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import type { ItemType } from '../components/types/item';
+import type { ItemType } from '../types/item';
 
 type DialogType = 'add' | 'edit' | 'delete' | null;
 

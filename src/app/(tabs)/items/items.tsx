@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-import type { ItemType } from '@/modules/item/components/types/item';
+import type { ItemType } from '@/modules/item/types/item';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
