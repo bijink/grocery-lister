@@ -6,7 +6,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ item
   const { itemId } = await params;
 
   if (!itemId) {
-    return NextResponse.json({ error: 'Item ID is required.' }, { status: 400 });
+    return NextResponse.json({ error: 'Item ID is required' }, { status: 400 });
   }
 
   // 1. Get the item's name first
@@ -21,7 +21,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ item
   }
 
   if (!item) {
-    return NextResponse.json({ error: 'Item not found.' }, { status: 404 });
+    return NextResponse.json({ error: 'Item not found' }, { status: 404 });
   }
 
   // 2. Delete the item
@@ -31,7 +31,10 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ item
   }
 
   // 3. Respond with the deleted item's name
-  return NextResponse.json({ message: `Item "${item.name}" deleted successfully.` });
+  return NextResponse.json(
+    { message: `Item '${item.name}' deleted successfully` },
+    { status: 200 },
+  );
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ itemId: string }> }) {
@@ -44,15 +47,15 @@ export async function PUT(req: Request, { params }: { params: Promise<{ itemId: 
   }
 
   if (!name) {
-    return NextResponse.json({ error: 'Item name must be provided' }, { status: 400 });
+    return NextResponse.json({ error: 'Item name is required' }, { status: 400 });
   }
 
   // Check for duplicate name (if name is being updated)
   if (name) {
-    const { data: existing, error: existingError } = await db
+    const { data: existingItem, error: existingError } = await db
       .from('grocery_items')
-      .select('id')
-      .eq('name', name)
+      .select('name')
+      .ilike('name', name)
       .neq('id', itemId)
       .maybeSingle();
 
@@ -60,8 +63,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ itemId: 
       return NextResponse.json({ error: existingError.message }, { status: 500 });
     }
 
-    if (existing) {
-      return NextResponse.json({ error: 'Duplicate item name not allowed' }, { status: 400 });
+    if (existingItem) {
+      return NextResponse.json(
+        { error: `Item '${existingItem.name}' already exists` },
+        { status: 400 },
+      );
     }
   }
 

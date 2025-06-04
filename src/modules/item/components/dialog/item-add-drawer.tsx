@@ -38,12 +38,12 @@ export default function ItemAddDrawer() {
       await queryClient.invalidateQueries({ queryKey: ['items'], refetchType: 'all' });
       closeDrawer();
       setItemName('');
-      toast.success('New item has been added.');
+      toast.success('New item added successfully');
     },
     onError: (err) => {
       const error = err as AxiosError<{ error: string }>;
       toast.error('Failed to add item', {
-        description: error.response?.data?.error || 'An unknown error occurred.',
+        description: `${error.response?.data?.error}.` || 'An unknown error occurred.',
       });
     },
   });

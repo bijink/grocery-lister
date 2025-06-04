@@ -48,7 +48,7 @@ export default function Lists() {
                 >
                   {list.items.slice(0, 3).map((item) => (
                     <div key={item.id} className="flex justify-between gap-2">
-                      <p className="truncate">{item.name}</p>
+                      <p className="grow truncate">{item.name}</p>
                       <div className="flex gap-2">
                         <p>-</p>
                         <p className="w-18 truncate text-right font-light">{item.quantity}</p>

@@ -4,33 +4,38 @@ import { useMeasure } from '@uidotdev/usehooks';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useGroceryListStore } from '@/modules/list/stores/grocery-list.store';
 
 interface AnimatedTabsProps {
-  children: ReactNode;
+  children: React.ReactNode;
   tabList: { value: string; label: string }[];
+  isListsLoading: boolean;
+  isItemsLoading: boolean;
+  listsLength: number;
+  itemsLength: number;
 }
 
-export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
+export function AnimatedTabs({
+  children,
+  tabList,
+  isListsLoading,
+  isItemsLoading,
+  listsLength,
+  itemsLength,
+}: AnimatedTabsProps) {
   const pathname = usePathname();
   const rootPath = pathname.split('/')[1];
-  const groceryLists = useGroceryListStore((state) => state.lists);
 
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-
-  const [isGroceryListsLoading, setIsGroceryListsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(rootPath);
   const [ref] = useMeasure();
+
+  const [activeTab, setActiveTab] = useState(rootPath);
 
   const indicatorX = tabRefs.current[activeTab]?.offsetLeft || 0;
   const indicatorWidth = tabRefs.current[activeTab]?.offsetWidth || 0;
 
-  useEffect(() => {
-    setIsGroceryListsLoading(false);
-  }, [groceryLists]);
   useEffect(() => {
     // Update active tab when pathname changes
     if (rootPath !== activeTab) {
@@ -56,8 +61,10 @@ export function AnimatedTabs({ children, tabList }: AnimatedTabsProps) {
                 <Link href={`/${tab.value}`}>
                   {tab.label}
                   {tab.value === 'lists' ? (
-                    <p>({isGroceryListsLoading ? '-' : groceryLists.length})</p>
-                  ) : null}
+                    <p>({isListsLoading ? '-' : listsLength})</p>
+                  ) : (
+                    <p>({isItemsLoading ? '-' : itemsLength})</p>
+                  )}
                 </Link>
               </TabsTrigger>
             ))}

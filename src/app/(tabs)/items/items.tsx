@@ -58,7 +58,7 @@ export default function Items() {
           filteredItems.map((item, index) => (
             <div key={item.id}>
               <div className="flex flex-row items-center justify-between py-1 pr-1 pl-4">
-                <p className="truncate text-lg" title={item.name}>
+                <p className="grow truncate text-lg" title={item.name}>
                   {item.name}
                 </p>
                 <div className="flex gap-1">
