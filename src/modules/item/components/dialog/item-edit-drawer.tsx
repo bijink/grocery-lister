@@ -40,12 +40,12 @@ export default function ItemEditDrawer() {
       await queryClient.invalidateQueries({ queryKey: ['items'], refetchType: 'all' });
       closeDrawer();
       setItemName('');
-      toast.success('Item has been edited.');
+      toast.success('Item updated successfully');
     },
     onError: (err) => {
       const error = err as AxiosError<{ error: string }>;
       toast.error('Failed to edit item', {
-        description: error.response?.data?.error || 'An unknown error occurred.',
+        description: `${error.response?.data?.error}.` || 'An unknown error occurred.',
       });
     },
   });

@@ -33,13 +33,13 @@ export default function ItemDeleteAlertDialog() {
   const handleDeleteItem = async () => {
     setIsLoading(true);
     try {
-      await axiosInstance.delete(`/api/items/${itemId}`);
+      const response = await axiosInstance.delete(`/api/items/${itemId}`);
       await queryClient.invalidateQueries({ queryKey: ['items'], refetchType: 'all' });
-      toast.success('Item has been deleted');
+      toast.success(response.data.message || 'Item deleted successfully');
     } catch (_error) {
-      const error = _error as AxiosError<{ message: string }>;
-      toast.error('Failed to delete', {
-        description: error.response?.data?.message || 'An unknown error occurred',
+      const error = _error as AxiosError<{ error: string }>;
+      toast.error('Failed to delete item', {
+        description: `${error.response?.data?.error}.` || 'An unknown error occurred.',
       });
     } finally {
       closeDialog();

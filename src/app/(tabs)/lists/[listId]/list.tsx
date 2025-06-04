@@ -76,7 +76,7 @@ export default function List({ id }: { id: number }) {
           <div className="flex flex-col gap-2">
             {groceryList.items.map((item) => (
               <div key={item.id} className="flex items-center justify-between gap-2">
-                <p className="truncate">{item.name}</p>
+                <p className="grow truncate">{item.name}</p>
                 <div className="flex gap-2">
                   <p>-</p>
                   <Input
