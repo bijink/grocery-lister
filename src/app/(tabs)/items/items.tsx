@@ -48,10 +48,20 @@ export default function Items() {
         <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
         <Input
           placeholder="Search items..."
-          className="pl-10"
+          className="pr-[4.5rem] pl-9"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        {searchTerm ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 transform !px-0"
+            onClick={() => setSearchTerm('')}
+          >
+            clear
+          </Button>
+        ) : null}
       </div>
       <div className="flex h-[63vh] flex-col overflow-scroll">
         {filteredItems?.length ? (
