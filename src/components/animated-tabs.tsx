@@ -58,7 +58,7 @@ export function AnimatedTabs({
                 }}
                 className="text-muted-foreground data-[state=active]:text-primary relative border-none bg-transparent px-4 py-2 font-medium !shadow-none !ring-0 !outline-none focus:ring-0"
               >
-                <Link href={`/${tab.value}`}>
+                <Link href={`/${tab.value}`} replace>
                   {tab.label}
                   {tab.value === 'lists' ? (
                     <p>({isListsLoading ? '-' : listsLength})</p>
